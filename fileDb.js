@@ -2,12 +2,34 @@ const fs = require('fs');
 
 const path = './messages/';
 
+
 module.exports = {
-    addMessage(message) {
-        fs.writeFile(path + message.datetime, JSON.stringify(message), err => {
-            if (err) {
-                console.log(err);
+    getLastMessages() {
+        try {
+            const lastMessages = [];
+            const files = fs.readdirSync(path);
+
+            for (let i = files.length - 1; i >= 0; i--) {
+                const fileContent = fs.readFileSync(path + files[i]);
+                lastMessages.unshift(JSON.parse(fileContent));
+
+                if (lastMessages.length === 5) {
+                   break;
+                }
             }
-        });
+
+            return lastMessages;
+
+        } catch (e) {
+            console.log(e);
+        }
+    },
+    addMessage(message) {
+        try {
+            fs.writeFileSync(path + message.datetime + '.txt', JSON.stringify(message));
+        } catch (e) {
+            console.log(e);
+        }
+
     }
 };

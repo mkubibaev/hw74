@@ -3,7 +3,7 @@ const fileDb = require('../fileDb');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.send('messages list');
+    res.send(fileDb.getLastMessages());
 });
 
 router.post('/', (req, res) => {
